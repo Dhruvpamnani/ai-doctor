@@ -1,26 +1,19 @@
-local QBCore = nil
-
-Citizen.CreateThread(function()
-	while QBCore == nil do
-	   TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
-	   Citizen.Wait(200)
-	end
-end)
+local QBCore = exports['qb-core']:GetCoreObject()
 
 local Active = false
 local test = nil
 local test1 = nil
-local Act = true
 local spam = true
 
- 
+local src = source
 
+local EMSOnline = 0
 
 RegisterCommand("help", function(source, args, raw)
 	if (QBCore.Functions.GetPlayerData().metadata["isdead"]) or (QBCore.Functions.GetPlayerData().metadata["inlaststand"]) and spam then
-		QBCore.Functions.TriggerCallback('hhfw:docOnline', function(EMSOnline, hasEnoughMoney)
+		QBCore.Functions.TriggerCallback('hhfw:docOnline', function(src, hasEnoughMoney)
 			if EMSOnline <= Config.Doctor and hasEnoughMoney and spam then
-				SpawnVehicle(GetEntityCoords(PlayerPedId()))
+				SpawnVehicle()
 				TriggerServerEvent('hhfw:charge')
 				Notify("Medic is arriving")
 			else
@@ -40,9 +33,11 @@ end)
 
 
 
-function SpawnVehicle(x, y, z)  
+function SpawnVehicle() 
+
 	spam = false
-	local vehhash = GetHashKey("ambulance")                                                     
+	local vehhash = GetHashKey("ambulance")
+	print(vehhash)                                                     
 	local loc = GetEntityCoords(PlayerPedId())
 	RequestModel(vehhash)
 	while not HasModelLoaded(vehhash) do
@@ -82,7 +77,7 @@ end
 Citizen.CreateThread(function()
     while true do
       Citizen.Wait(200)
-        if Active or Act then
+        if Active then
             local loc = GetEntityCoords(GetPlayerPed(-1))
 			local lc = GetEntityCoords(test)
 			local ld = GetEntityCoords(test1)
@@ -96,7 +91,7 @@ Citizen.CreateThread(function()
 					Active = false
 					Act = false
 					ClearPedTasksImmediately(test1)
-					DoctorNPC()
+					-- DoctorNPC()
 				end
             end
         end
