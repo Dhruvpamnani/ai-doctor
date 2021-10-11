@@ -91,7 +91,7 @@ Citizen.CreateThread(function()
 					Active = false
 					Act = false
 					ClearPedTasksImmediately(test1)
-					-- DoctorNPC()
+					DoctorNPC()
 				end
             end
         end
